@@ -115,7 +115,7 @@ for region in regionprops(labels):
     # add data to dataframe
     data.append(
         {
-            "redondez": roundness, 
+            "roundness": roundness, 
             "hu0": hu[0], 
             "hu1": hu[1], 
             "hu2": hu[2], 
@@ -133,4 +133,4 @@ for region in regionprops(labels):
 
 df = pd.DataFrame(data)
 
-df.to_csv("1.csv")
+df.to_csv("1.csv", index=False)
