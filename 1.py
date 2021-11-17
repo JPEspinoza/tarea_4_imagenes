@@ -12,7 +12,9 @@ Tras extraer las caracteristicas exporta las caracteristicas en 1.csv
 import cv2
 import numpy as np
 import pandas as pd
+from scipy.ndimage.fourier import fourier_uniform
 from skimage.measure import label, regionprops, EllipseModel
+from matplotlib import pyplot as plt
 
 def sonka_moments(m):
     """
@@ -36,6 +38,9 @@ def sonka_moments(m):
         +m[0,2]*(m[3,0]*m[1,2]-m[2,1]**2)
     ) /m[0,0]**7
 
+    # sometimes m01 is 0, we can't do a division by zero so just
+    # set sonka4 to 0 instead
+    # hu6 does the same thing as well
     if(m[1,0] != 0):
         i4 = (
             m[2,0]**3*m[0,3]**2
@@ -71,10 +76,6 @@ labels = label(binary_image)
 
 #loop over regions
 for region in regionprops(labels):
-
-    ### show centroid
-    centroid_y, centroid_x = region.centroid
-
     ### get hu
     hu = region.moments_hu
 
@@ -98,11 +99,30 @@ for region in regionprops(labels):
     x, y= zip(*contours)
     x= np.array(x).reshape(-1,1)
     y= np.array(y).reshape(-1,1)
+    centroid_y, centroid_x = region.centroid
     distances = np.sqrt((x-centroid_x)**2+(y-centroid_y)**2)
     mean_distance = np.mean(distances)
 
     # finally, complexity
     complexity = (region.area) / (mean_distance ** 2)
+
+    ####
+    ### fourier
+    ####
+    x, y = zip(*contours)
+    complex_coords = np.array(x) + 1j*np.array(y)
+    complex_coords = np.append(complex_coords, complex_coords[0:1])
+
+    fourier = np.fft.fft(complex_coords)
+    #Energía
+    E = np.abs(fourier)/np.sum(np.abs(fourier))
+    acum = np.cumsum(E)
+
+    #ordenamos de menor a mayor
+    idx = np.argsort(E)
+    idx = idx[::-1] #orden inverso
+
+    fourier = fourier[idx[0:5]]
 
     ### perimeter
     # perimeter with line over center of pixes
@@ -127,6 +147,11 @@ for region in regionprops(labels):
             "sonka1": sonka[1],
             "sonka2": sonka[2],
             "sonka3": sonka[3],
+            "fourier0": fourier[0],
+            "fourier1": fourier[1],
+            "fourier2": fourier[2],
+            "fourier3": fourier[3],
+            "fourier4": fourier[4],
             "complexity": complexity,
         }
     )
