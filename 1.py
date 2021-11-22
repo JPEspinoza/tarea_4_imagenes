@@ -12,9 +12,7 @@ Tras extraer las caracteristicas exporta las caracteristicas en 1.csv
 import cv2
 import numpy as np
 import pandas as pd
-from scipy.ndimage.fourier import fourier_uniform
-from skimage.measure import label, regionprops, EllipseModel
-from matplotlib import pyplot as plt
+from skimage.measure import label, regionprops
 
 def sonka_moments(m):
     """
@@ -130,6 +128,8 @@ for region in regionprops(labels):
     data.append(
         {
             "roundness": roundness, 
+            "complexity": complexity,
+
             "hu0": hu[0], 
             "hu1": hu[1], 
             "hu2": hu[2], 
@@ -137,16 +137,26 @@ for region in regionprops(labels):
             "hu4": hu[4], 
             "hu5": hu[5], 
             "hu6": hu[6], 
+
             "sonka0": sonka[0],
             "sonka1": sonka[1],
             "sonka2": sonka[2],
             "sonka3": sonka[3],
-            "fourier0": fourier[0],
-            "fourier1": fourier[1],
-            "fourier2": fourier[2],
-            "fourier3": fourier[3],
-            "fourier4": fourier[4],
-            "complexity": complexity,
+
+            "fourier0_real":    np.real(fourier[0]),
+            "fourier0_complex": np.imag(fourier[0]),
+
+            "fourier1_real":    np.real(fourier[1]),
+            "fourier1_complex": np.imag(fourier[1]),
+
+            "fourier2_real":    np.real(fourier[2]),
+            "fourier2_complex": np.imag(fourier[2]),
+
+            "fourier3_real":    np.real(fourier[3]),
+            "fourier3_complex": np.imag(fourier[3]),
+
+            "fourier4_real":    np.real(fourier[4]),
+            "fourier4_complex": np.imag(fourier[4]),
         }
     )
 
