@@ -143,23 +143,16 @@ for region in regionprops(labels):
             "sonka2": sonka[2],
             "sonka3": sonka[3],
 
-            "fourier0_real":    np.real(fourier[0]),
-            "fourier0_complex": np.imag(fourier[0]),
-
-            "fourier1_real":    np.real(fourier[1]),
-            "fourier1_complex": np.imag(fourier[1]),
-
-            "fourier2_real":    np.real(fourier[2]),
-            "fourier2_complex": np.imag(fourier[2]),
-
-            "fourier3_real":    np.real(fourier[3]),
-            "fourier3_complex": np.imag(fourier[3]),
-
-            "fourier4_real":    np.real(fourier[4]),
-            "fourier4_complex": np.imag(fourier[4]),
+            "fourier0": fourier[0],
+            "fourier1": fourier[1],
+            "fourier2": fourier[2],
+            "fourier3": fourier[3],
+            "fourier4": fourier[4],
         }
     )
 
 df = pd.DataFrame(data)
+
+print(df)
 
 df.to_csv("1.csv", index=False)
