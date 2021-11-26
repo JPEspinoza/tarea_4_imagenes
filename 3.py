@@ -23,6 +23,7 @@ data = data.drop("cluster", axis=1)
 pca = PCA(2)
 pca_data = pca.fit_transform(data)
 plt.figure()
+plt.title("PCA")
 plt.scatter(pca_data[:,0], pca_data[:,1], c=classes)
 
 # visualizar datos con LDA
@@ -30,6 +31,7 @@ plt.scatter(pca_data[:,0], pca_data[:,1], c=classes)
 lda = LinearDiscriminantAnalysis(n_components=2)
 lda_data = lda.fit_transform(data, classes)
 plt.figure()
+plt.title("LDA")
 plt.scatter(lda_data[:,0], lda_data[:,1], c=classes)
 #plt.show()
 
@@ -160,8 +162,7 @@ while len(features_selected) < 10:
     print(f"new best feature: {best_feature}, score: {best_score}")
     print(f"current features: {features_selected}\n")
 
-print(features_selected)
-print()
+print(f"SFS finished, current features: {features_selected}\n")
 
 # backwards selection
 while len(features_selected) > 2:
@@ -190,8 +191,9 @@ while len(features_selected) > 2:
     print(f"current features: {features_selected}, current score: {current_score}\n")
 
 
-print(features_selected)
+print(f"SBS finished, current features: {features_selected}\n")
 
 fig = plt.figure()
 plt.scatter(data[features_selected[0]], data[features_selected[1]], c=classes)
+plt.title("Fisher + Plus-L Take-R")
 plt.show()
