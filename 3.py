@@ -12,11 +12,9 @@ from sklearn.decomposition import PCA
 from numpy.matlib import repmat
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
-data = pd.read_csv("2.csv")
+data = pd.read_csv("features.csv")
 
-classes = data[["cluster"]].to_numpy().ravel()
-
-data = data.drop("cluster", axis=1)
+classes = pd.read_csv('clase_letras.csv').to_numpy().ravel()
 
 # visualizar datos con PCA para ver clusters
 # esto es SOLO para visualizar

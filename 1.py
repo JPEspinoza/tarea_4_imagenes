@@ -6,7 +6,7 @@ Este script hace el paso 1 de la tarea 4.
     3. sonka, hlavac y boyle
     4. descriptores de fourier
     5. complejidad de forma
-Tras extraer las caracteristicas exporta las caracteristicas en 1.csv
+Tras extraer las caracteristicas exporta las caracteristicas en features.csv
 """
 
 import cv2
@@ -153,6 +153,4 @@ for region in regionprops(labels):
 
 df = pd.DataFrame(data)
 
-print(df)
-
-df.to_csv("1.csv", index=False)
+df.to_csv("features.csv", index=False)

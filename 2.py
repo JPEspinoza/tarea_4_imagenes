@@ -13,60 +13,11 @@ import numpy as np
 
 # we index every character in the list
 # this will serve as the clusters
-characters = (
-    'b',
-    'e',
-    'a',
-    'e',
-    'g',
-    'c',
-    'f',
-    'a',
-    'f',
-    'b',
-    'e',
-    'c',
-    'c',
-    'c',
-    'b',
-    'a',
-    'f',
-    'f',
-    'e',
-    'g',
-    'b',
-    'f',
-    'a',
-    'b',
-    'c',
-    'g',
-    'e',
-    'f', 
-    'g',
-    'e',
-    'a',
-    'g',
-    'a',
-    'c',
-    'b',
-    'g',
-)
-
-# because clusters are usually indexed by numbers we convert the characters to numbers
-character_map = {
-    "a": 0,
-    "b": 1,
-    "c": 2,
-    "e": 3,
-    "f": 4,
-    "g": 5,
-}
-cluster = [character_map[i] for i in characters]
 
 # leemos los datos
 # pandas no sabe manejar datos complejos asi que los convertimos manualmente
 data = pd.read_csv(
-    "1.csv", 
+    "features.csv", 
     converters={
         'fourier0': lambda s: complex(s),
         'fourier1': lambda s: complex(s),
@@ -124,7 +75,4 @@ data = pd.DataFrame(StandardScaler().fit_transform(data), columns = data.columns
 # agregamos fourier
 data = data.join(fourier_split)
 
-# les agregamos los clusters
-data["cluster"] = cluster
-
-data.to_csv("2.csv", index=False)
+data.to_csv("features_scaled.csv", index=False)
