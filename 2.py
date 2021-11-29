@@ -55,6 +55,8 @@ fourier_split["fourier2_imag"] = np.imag(fourier['fourier2'])
 fourier_split["fourier3_real"] = np.real(fourier['fourier3'])
 fourier_split["fourier3_imag"] = np.imag(fourier['fourier3'])
 
+fourier_split["fourier4_real"] = np.real(fourier['fourier4'])
+fourier_split["fourier4_imag"] = np.imag(fourier['fourier4'])
 
 # extraemos todos los demas datos, excluyendo fourier que ya trabajamos
 data = data.drop(

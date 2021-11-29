@@ -6,13 +6,26 @@ conjunto de características maximizando el índice de Fisher
 
 import pandas as pd
 import numpy as np
-import seaborn as sns
 from matplotlib import pyplot as plt
 from sklearn.decomposition import PCA
 from numpy.matlib import repmat
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
-data = pd.read_csv("features.csv")
+data = pd.read_csv("features_scaled.csv")
+
+"""
+# if you want to find out features for not scaled data
+# we ignore the imaginary part for ease of use
+data = pd.read_csv(
+    "features.csv",
+    converters={
+        'fourier0': lambda s: np.real(complex(s)),
+        'fourier1': lambda s: np.real(complex(s)),
+        'fourier2': lambda s: np.real(complex(s)),
+        'fourier3': lambda s: np.real(complex(s)),
+        'fourier4': lambda s: np.real(complex(s)),
+    }
+)
+"""
 
 classes = pd.read_csv('clase_letras.csv').to_numpy().ravel()
 
@@ -23,15 +36,6 @@ pca_data = pca.fit_transform(data)
 plt.figure()
 plt.title("PCA")
 plt.scatter(pca_data[:,0], pca_data[:,1], c=classes)
-
-# visualizar datos con LDA
-# esto fue lo que estamos intentando llegar en teoria
-lda = LinearDiscriminantAnalysis(n_components=2)
-lda_data = lda.fit_transform(data, classes)
-plt.figure()
-plt.title("LDA")
-plt.scatter(lda_data[:,0], lda_data[:,1], c=classes)
-#plt.show()
 
 # calcular fisher
 def fisher_extraction(data, classes):
@@ -143,7 +147,7 @@ print(highest)
 features_selected = []
 best_score = 0
 
-while len(features_selected) < 10:
+while len(features_selected) < 23:
 
     best_feature = ""
     for new_feature in data.columns:
@@ -163,8 +167,10 @@ while len(features_selected) < 10:
 print(f"SFS finished, current features: {features_selected}\n")
 
 # backwards selection
-while len(features_selected) > 2:
+while len(features_selected) > 23:
 
+    # every cycle we check the score with a feature removed
+    # we remove the feature where the other features had the best score
     best_score = 0
     worst_feature = ""
 
@@ -179,13 +185,13 @@ while len(features_selected) > 2:
         if new_score > best_score:
 
             worst_feature = feature
-            worst_score = new_score
+            best_score = new_score
 
     features_selected.remove(worst_feature)
 
     current_score = fisher_extraction(data[features_selected], classes)
     
-    print(f"new worst feature: {worst_feature}, score: {worst_score}")
+    print(f"new worst feature: {worst_feature}, score: {best_score}")
     print(f"current features: {features_selected}, current score: {current_score}\n")
 
 
@@ -194,4 +200,4 @@ print(f"SBS finished, current features: {features_selected}\n")
 fig = plt.figure()
 plt.scatter(data[features_selected[0]], data[features_selected[1]], c=classes)
 plt.title("Fisher + Plus-L Take-R")
-plt.show()
+#plt.show()
